@@ -5,14 +5,14 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-// ESTA PARTE É A CHAVE: Ela diz ao navegador que qualquer site pode acessar
+// 1. Defina os headers de permissão
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': '*', // Permite que qualquer site acesse
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-// O Railway precisa dessa função OPTIONS para validar a segurança
+// 2. Crie esta função OPTIONS (O navegador precisa dela para validar o acesso)
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       sys: { country: data.pais }
     };
 
-    // MUITO IMPORTANTE: Retornar os headers aqui também!
+    // 3. IMPORTANTE: Passe os headers no final do seu JSON de sucesso
     return NextResponse.json(respostaFormatada, { headers: corsHeaders });
 
   } catch (error) {
